@@ -1,20 +1,23 @@
-var Painel = function(object, childarray) {
+/**
+ * Painel genérico, incluí a user interface que é partilhada por todos os paineis
+ * @constructor
+ */
+var Painel = function() {
     //cria as li  dos ul do objecto
     this.criarLi = function(ul, array, callback) {
 
         while (ul.firstChild) {
             ul.removeChild(ul.firstChild);
         }
-        array.forEach(function(elemento, index, array) {
+        array.forEach(function(elemento) {
             var consolaSpan = document.createElement('span');
 
             consolaSpan.textContent = elemento.nome;
             consolaSpan.onclick = function(e) {
-                
-                if(callback !== void 0)
+
+                if (callback !== void 0)
                     callback(elemento);
-                    
-                
+
             }
 
             var checkbox = document.createElement('input');
@@ -76,18 +79,20 @@ Painel.prototype.aplicar = function() {
 }
 
 
+/**
+ * Painel que faz a gestão da aplicação domotica
+ * @constructor
+ * @param {Domotico} domotico - O sistema domótico que irá ser gerido pelo painel
+ */
 var PainelDomotico = function(domotico) {
 
-
     Painel.call(this);
-
 
     //meter a classe do elemento para domotico
     this.elemento.setAttribute('class', ' domotico');
 
     //meter o nome do painel
     this.nome.textContent = domotico.nome;
-
 
     //titulo antes do ul
     this.subNome.textContent = "Consolas:"
@@ -123,10 +128,10 @@ var PainelDomotico = function(domotico) {
     //vamos agora criar os filhos que sao as consolas
     var consolas = domotico.consolas;
     this.criarLi(this.ul, consolas, function(consola) {
-        var painelConsola= new PainelConsola(consola);
+        var painelConsola = new PainelConsola(consola);
         painelConsola.aplicar();
-        
-        
+
+
     });
 
     //botao de criar
@@ -164,39 +169,38 @@ var PainelDomotico = function(domotico) {
 
     }
 
-
-
-
     //listener de mudancas
     domotico.adicionarChangeListener(function() {
         this.nome.textContent = domotico.nome;
         var consolas = domotico.consolas;
         this.criarLi(this.ul, consolas, function(consola) {
-        var painelConsola= new PainelConsola(consola);
-        painelConsola.aplicar();
-        
-        
-    });
+            var painelConsola = new PainelConsola(consola);
+            painelConsola.aplicar();
+
+
+        });
     }.bind(this));
 
-
-
 }
+
 PainelDomotico.prototype = Object.create(Painel.prototype);
 PainelDomotico.prototype.constructor = PainelDomotico;
 
 
+/**
+ * Painel que faz a gestão de um consola
+ * @constructor
+ * @param {Consola} consola - A consola que irá ser gerida pelo painel
+ */
 var PainelConsola = function(consola) {
-    
+
     Painel.call(this);
 
-
     //meter a classe do elemento para domotico
-    this.elemento.setAttribute('class', ' consola');
+    this.elemento.setAttribute('class', 'consola');
 
     //meter o nome do painel
     this.nome.textContent = consola.nome;
-
 
     //titulo antes do ul
     this.subNome.textContent = "Compartimentos:"
@@ -232,10 +236,10 @@ var PainelConsola = function(consola) {
     //vamos agora criar os filhos que sao as consolas
     var compartimentos = consola.compartimentos;
     this.criarLi(this.ul, compartimentos, function(compartimento) {
-        var painelCompartimento= new PainelCompartimento(compartimento);
+        var painelCompartimento = new PainelCompartimento(compartimento);
         painelCompartimento.aplicar();
-        
-        
+
+
     });
 
     //botao de criar
@@ -272,36 +276,33 @@ var PainelConsola = function(consola) {
 
 
     }
-    
-    
-    
-
 
     //listener de mudancas
     consola.adicionarChangeListener(function() {
         this.nome.textContent = consola.nome;
         var compartimentos = consola.compartimentos;
         this.criarLi(this.ul, compartimentos, function(compartimento) {
-        var painelCompartimento= new PainelCompartimento(compartimento);
-        painelCompartimento.aplicar();
-        
-        
-    });
+            var painelCompartimento = new PainelCompartimento(compartimento);
+            painelCompartimento.aplicar();
+
+
+        });
     }.bind(this));
-    
+
     //botao de sistema domotico
     this.sistemaDomotico = document.createElement("button");
     this.sistemaDomotico.textContent = "Sistema Domotico";
-    
-    this.sistemaDomotico.onclick=function(e){
-        if(consola.domotico !== void 0){
-        var painelDomotico = new PainelDomotico(consola.domotico);
-        painelDomotico.aplicar();
-        }else{
+
+    this.sistemaDomotico.onclick = function(e) {
+        if (consola.domotico !== void 0) {
+            var painelDomotico = new PainelDomotico(consola.domotico);
+            painelDomotico.aplicar();
+        }
+        else {
             alert("Esta consola nao pertence a nenhum sistema domotico");
         }
     }
-    
+
     this.elemento.appendChild(this.sistemaDomotico);
 
 
@@ -309,19 +310,22 @@ var PainelConsola = function(consola) {
 PainelConsola.prototype = Object.create(Painel.prototype);
 PainelConsola.prototype.constructor = PainelConsola;
 
+/**
+ * Painel que faz a gestão de um compartimento
+ * @constructor
+ * @param {Compartimento} compartimento - A compartimento que irá ser gerida pelo painel
+ */
 var PainelCompartimento = function(compartimento) {
-Painel.call(this);
-
+    Painel.call(this);
 
     //meter a classe do elemento para domotico
-    this.elemento.setAttribute('class', ' consola');
+    this.elemento.setAttribute('class', 'compartimento');
 
     //meter o nome do painel
     this.nome.textContent = compartimento.nome;
 
-
     //titulo antes do ul
-    this.subNome.textContent = "Compartimentos:"
+    this.subNome.textContent = "Equipamentos:"
 
     //click no nome
     this.nome.onclick = function(e) {
@@ -333,10 +337,12 @@ Painel.call(this);
         input.focus();
 
         input.onblur = function(e) {
+
             console.log(input.value);
             compartimento.nome = input.value;
 
             parent.replaceChild(this.nome, input);
+
         }.bind(this);
 
         input.onkeypress = function(event) {
@@ -359,22 +365,35 @@ Painel.call(this);
 
     //botao de criar
     this.criar.onclick = function(e) {
-        var stringAMostrar="";
-         
+        var stringAMostrar = "";
+
         var mapIter = equipamentoMap.keys();
         for (var aux of mapIter) {
-            stringAMostrar+=aux+"|"
+            stringAMostrar += aux + "|"
         }
-        
-      var tipo=  prompt("Indique o nome do equipamento a criar: ",stringAMostrar);
-      
-      if(equipamentoMap.get(tipo)){
-         var eq = getEquipamento(tipo);
-         console.log(eq);
-         compartimento.adicionarEquipamento(eq);
-         console.log(compartimento.equipamentos);
-      }
-        
+
+        var tipo = prompt("Indique o nome do equipamento a criar: ", stringAMostrar);
+
+
+
+
+       
+     
+        if(tipo!== void 0){
+            
+             tipo = tipo.split("|");
+                console.log(tipo);
+        for (var i = 0; i < tipo.length; i++) {
+            if (equipamentoMap.get(tipo[i])) {
+                var eq = getEquipamento(tipo[i]);
+
+                compartimento.adicionarEquipamento(eq);
+
+            }
+
+        }
+        }
+
     }
 
     //botao de remover
@@ -386,7 +405,7 @@ Painel.call(this);
 
         for (var i = 0; i < checkboxes.length; i++) {
 
-            if (checkboxes[i].checked == true)
+            if (checkboxes[i].checked)
                 nomes.push(checkboxes[i].value);
 
         }
@@ -404,37 +423,42 @@ Painel.call(this);
         for (var i = 0; i < checkBoxes.length; i++)
             checkBoxes[i].checked = true;
 
-
     }
-    
-    
-    
 
 
     //listener de mudancas
     compartimento.adicionarChangeListener(function() {
         this.nome.textContent = compartimento.nome;
         var equipamentos = compartimento.equipamentos;
-        this.criarLi(this.ul, equipamentos,function(){
+        this.criarLi(this.ul, equipamentos, function() {
             console.log("oi");
         });
     }.bind(this));
-    
+    //botao de monitorizar
+    this.botaoMonitorizar = document.createElement("button");
+    this.botaoMonitorizar.textContent = "Monitorizar";
+
+    this.botaoMonitorizar.onclick = function(e) {
+        var painelMonitorizacao = new PainelMonotorizacao(compartimento);
+        painelMonitorizacao.aplicar();
+    }
+    this.elemento.appendChild(this.botaoMonitorizar);
+
     //botao de sistema domotico
     this.consola = document.createElement("button");
     this.consola.textContent = "Consola";
-    
-    this.consola.onclick=function(e){
-        if(compartimento.consola !== void 0){
-        var painelConsola = new PainelConsola(compartimento.consola);
-        painelConsola.aplicar();
-        }else{
+
+    this.consola.onclick = function(e) {
+        if (compartimento.consola !== void 0) {
+            var painelConsola = new PainelConsola(compartimento.consola);
+            painelConsola.aplicar();
+        }
+        else {
             alert("Esta consola nao pertence a nenhum sistema domotico");
         }
     }
-    
-    this.elemento.appendChild(this.consola);
 
+    this.elemento.appendChild(this.consola);
 
 }
 PainelCompartimento.prototype = Object.create(Painel.prototype);
@@ -442,12 +466,30 @@ PainelCompartimento.prototype.constructor = PainelCompartimento;
 
 
 //TODO: Poder alterar o compartimento sem ter que criar outro painel
+
+/**
+ * Painel que faz a gestão dos equipamentos de um compartimento
+ * @constructor
+ * @param {Compartimento} compartimento - A compartimento que irá ser gerida pelo painel
+ */
 var PainelMonotorizacao = function(compartimento) {
 
+    this.elemento = document.createElement("div");
+    this.elemento.setAttribute('class', 'painel-motorizacao');
     this.table = document.createElement('table');
+    //botao compartimento
+    this.botaoVoltar = document.createElement("button");
+    this.botaoVoltar.textContent = "voltar";
+
+    this.botaoVoltar.onclick = function(e) {
+        var painelCompartimento = new PainelCompartimento(compartimento);
+        painelCompartimento.aplicar();
+    }
 
     var i = 0;
     var tr;
+    
+   
     compartimento.equipamentos.forEach(function(equipamento) {
 
         if (i == 0) {
@@ -460,27 +502,28 @@ var PainelMonotorizacao = function(compartimento) {
         td.appendChild(wrapEquipamento(equipamento).elemento);
         tr.appendChild(td);
 
-        i = (i + 1) % 4;
+        i = (i + 1) % Math.ceil(Math.sqrt(compartimento.equipamentos.length));
 
 
     }, this);
 
+
+    this.elemento.appendChild(this.table);
+    this.elemento.appendChild(this.botaoVoltar);
+
 }
-
-
-
+PainelMonotorizacao.prototype = Object.create(Painel.prototype);
+PainelMonotorizacao.prototype.constructor = PainelMonotorizacao;
 
 var equipamentoMap = new Map();
-equipamentoMap.set("MotorEletrico",MotorEletrico);
-equipamentoMap.set("TrincoEletrico",TrincoEletrico);
-equipamentoMap.set("GeradorMovimento",GeradorMovimento);
-equipamentoMap.set("ArCondicionado",ArCondicionado);
-equipamentoMap.set("Termometro",Termometro);
-equipamentoMap.set("DetetorFecho",DetetorFecho);
-equipamentoMap.set("DetetorMovimento",DetetorMovimento);
-equipamentoMap.set("DetetorPosicaoEstore",DetetorPosicaoEstore);
-
-
+equipamentoMap.set("MotorEletrico", MotorEletrico);
+equipamentoMap.set("TrincoEletrico", TrincoEletrico);
+equipamentoMap.set("GeradorMovimento", GeradorMovimento);
+equipamentoMap.set("ArCondicionado", ArCondicionado);
+equipamentoMap.set("Termometro", Termometro);
+equipamentoMap.set("DetetorFecho", DetetorFecho);
+equipamentoMap.set("DetetorMovimento", DetetorMovimento);
+equipamentoMap.set("DetetorPosicaoEstore", DetetorPosicaoEstore);
 
 function getEquipamento(equipamento) {
 

@@ -1,25 +1,43 @@
-function Alteravel() {
 
+/**
+ * Representa um objeto que pode ser alteravel.
+ * Esta classe possibilita registar eventos de alteração
+ * @constructor
+ */
+function Alteravel() {
     this.changeHandlers = [];
 }
 
+/**
+ * Adiciona um handler que irá correr ao ser alterado este objeto
+ * @param {Function} listener - irá correr ao ser alterado este objeto.
+ */
 Alteravel.prototype.adicionarChangeListener = function(listener) {
-
     this.changeHandlers.push(listener);
-
 }
 
+/**
+ * Envia um change event para todos os handlers
+ * @param {Object} event - evento que irá ser lançado a todos os handlers registados
+ */
 Alteravel.prototype.enviarChangeEvent = function(event) {
     this.changeHandlers.forEach(function(handler) {
         handler(event);
     });
 }
 
-
-
+/**
+ * Representa um sistema domotico
+ * @constructor
+ * @param {String} nome - O nome do sistema domotico
+ */
 function Domotico(nome) {
+    
     Alteravel.call(this);
-    var aux = nome || "Sistema Domótico"
+    //TODO: O nome não convem ser vazio
+    var aux = nome || "Sistema Domótico";
+    this.consolas = [];
+    
     Object.defineProperty(this, 'nome', {
 
         enumerable: true,
@@ -28,28 +46,30 @@ function Domotico(nome) {
             return aux;
         },
         set: function(newValue) {
-
-
             aux = newValue;
             this.enviarChangeEvent();
-
-
-
         }
 
     });
 
-
-    this.consolas = [];
-
 }
 Domotico.prototype = Object.create(Alteravel.prototype);
 Domotico.prototype.constructor = Domotico;
+
+/**
+ * Verifica se o objeto tem uma consola com esse nome
+ * @param {String} nome - nome que irá ser testado
+ */
 Domotico.prototype.hasConsola = function(nome) {
     return this.consolas.some(consola => consola.nome == nome);
 }
-Domotico.prototype.criarConsola = function(nome) {
 
+/**
+ * Cria uma consola e adiciona a este sistema
+ * @param {String} nome - nome da consola
+ */
+Domotico.prototype.criarConsola = function(nome) {
+    
     var hasNomeConsola = this.consolas.some(consola => consola.nome == nome);
 
     if (!hasNomeConsola) {
@@ -58,32 +78,44 @@ Domotico.prototype.criarConsola = function(nome) {
 
         this.consolas.push(consola);
         this.enviarChangeEvent();
+        
     }
 
 }
-Domotico.prototype.apagarConsola = function(nome) {
 
+/**
+ * Apaga uma consola do sistema
+ * @param {String} nome - nome da consola a apagar
+ */
+Domotico.prototype.apagarConsola = function(nome) {
+    
     this.consolas.forEach(function(consola, index, array) {
 
-        if (consola.nome == nome) {
-
+        if (consola.nome == nome) 
             array.splice(index, 1);
 
-        }
-
     });
+    
     this.enviarChangeEvent();
 
 }
 
-
-
+/**
+ * Representa uma consola do sistema domotico
+ * @constructor
+ * @param {String} nome - O nome da consola
+ * @param {Domotico} domotico - O sistema domotico
+ */
 function Consola(nome, domotico) {
-    if (nome == void 0) {
+    
+    if (nome == void 0) 
         throw Error('Nome nao pode ser vazio');
-    }
+    
     Alteravel.call(this);
+    
     this.domotico = domotico;
+    this.compartimentos = []; //Todo: cuidado com os acessos
+    
     Object.defineProperty(this, 'nome', {
 
         enumerable: true,
@@ -101,28 +133,34 @@ function Consola(nome, domotico) {
                 nome = newValue;
                 this.enviarChangeEvent();
             }
-
-
-
+            
         }
 
     });
 
-
-    this.compartimentos = []; //Todo: cuidado com os acessos
-
 }
+
 Consola.prototype = Object.create(Alteravel.prototype);
 Consola.prototype.constructor = Consola;
+
+/**
+ * Verifica se a consola tem um determinado compartimento
+ * @param {String} nome - O nome da compartimento a testar
+ * @returns {Boolean}
+ */
 Consola.prototype.hasCompartimento=function(nome){
   return   this.compartimentos.some(compartimento =>
         compartimento.nome == nome);
 }
+
+/**
+ * Cria um compartimento na consola
+ * @param {String} nome - O nome da compartimento a criar
+ */
 Consola.prototype.criarCompartimento = function(nome) {
 
     var hasNomeCompartimento = this.compartimentos.some(compartimento =>
         compartimento.nome == nome);
-
 
     if (!hasNomeCompartimento) {
 
@@ -131,8 +169,12 @@ Consola.prototype.criarCompartimento = function(nome) {
         this.enviarChangeEvent();
     }
 
-
 }
+
+/**
+ * Apaga um compartimento da consola
+ * @param {String} nome - O nome da compartimento a apagar
+ */
 Consola.prototype.apagarCompartimento = function(nome) {
     this.compartimentos.forEach(function(compartimento, index, array) {
 
@@ -207,6 +249,7 @@ Compartimento.prototype.adicionarEquipamento = function(equipamento) {
 
     if (!equipamento.isChildOf(this))
         equipamento.setCompartimento(this);
+        
 
 }
 
