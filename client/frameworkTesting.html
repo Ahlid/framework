@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+    <html lang="pt-PT">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Flow framework</title>
+        
+        <link rel="stylesheet" type="text/css" href="css/equipamento.css">
+        <link rel="stylesheet" type="text/css" href="css/flow_canvas.css">
+        
+        <script src="js/functions.js"></script>
+        <script src="js/logicaDomotico.js"></script>
+        <script src="js/sensor.js"></script>
+        <script src="js/atuador.js"></script>
+        <script src="js/wrapper.js"></script>
+        <script src="js/paineis.js"></script>
+        
+    </head>
+
+    <body>
+        <script>
+            var flowCanvas = new FlowCanvas(1000, 600);
+            document.body.appendChild(flowCanvas.element);
+
+
+            /*
+            var flowSocket1 = new FlowSocket(flowCanvas);
+            var flowSocket2 = new FlowSocket(flowCanvas);
+            var flowSocket3 = new FlowSocket(flowCanvas);
+            var flowSocket4 = new FlowSocket(flowCanvas);
+            var flowSocket5 = new FlowSocket(flowCanvas);
+            var flowSocket6 = new FlowSocket(flowCanvas);
+            
+            
+            */
+            function addObject(flowCanvas,id,name){
+                var flowObject = new FlowObject(id,name);
+                flowCanvas.addFlowObject(flowObject);
+                return flowObject;
+                
+            }
+            
+            function makeObject(){
+                var id=prompt('id');
+                var nome=prompt('nome');
+                addObject(id,nome);
+            }
+            
+           /* 
+            
+            flowSocket1.setFlowObject(flowObject1);
+            flowObject1.element.appendChild(flowSocket1.element);
+            
+            flowSocket2.setFlowObject(flowObject1);
+            flowObject1.element.appendChild(flowSocket2.element);
+            
+            flowSocket3.setFlowObject(flowObject2);
+            flowObject2.element.appendChild(flowSocket3.element);
+            
+            flowSocket4.setFlowObject(flowObject2);
+            flowObject2.element.appendChild(flowSocket4.element);
+            
+            flowSocket5.setFlowObject(flowObject3);
+            flowObject3.element.appendChild(flowSocket5.element);
+            
+            flowSocket6.setFlowObject(flowObject3);
+            flowObject3.element.appendChild(flowSocket6.element);
+           
+       
+
+       
+         <button onClick=makeObject()>Adicionar</button> 
+         */
+
+            var compartimento = new Compartimento("Cozinha");
+          
+            var wrappers = [];
+          
+          
+            var arCondicionado1 = new ArCondicionado();
+            arCondicionado1.setCompartimento(compartimento);
+            //Dois wrappers para o mesmo ar condicionado ;)
+            var wrapperArCondicionado1 = wrapEquipamento(arCondicionado1);
+            wrappers.push(wrapperArCondicionado1);
+            var wrapperArCondicionado2 = wrapEquipamento(arCondicionado1);
+            wrappers.push(wrapperArCondicionado2);
+
+            var detetorFecho1 = new DetetorFecho();
+            detetorFecho1.setCompartimento(compartimento);
+            var wrapperDetetorFecho1 = wrapEquipamento(detetorFecho1);
+            wrappers.push(wrapperDetetorFecho1);
+            
+            var detetorFecho2 = new DetetorFecho();
+            detetorFecho2.setCompartimento(compartimento);
+            var wrapperDetetorFecho2 = wrapEquipamento(detetorFecho2);
+            wrappers.push(wrapperDetetorFecho2);
+            
+            
+            var trincoEletrico1 = new TrincoEletrico();
+            trincoEletrico1.setCompartimento(compartimento);
+            trincoEletrico1.setSensor(detetorFecho1);
+            var wrapperTrinco1 = wrapEquipamento(trincoEletrico1);
+            wrappers.push(wrapperTrinco1);
+            
+            var trincoEletrico2 = new TrincoEletrico();
+            trincoEletrico2.setCompartimento(compartimento);
+            trincoEletrico2.setSensor(detetorFecho1);
+            var wrapperTrinco2 = wrapEquipamento(trincoEletrico2);
+            wrappers.push(wrapperTrinco2);
+            
+            
+            var motor1 = new MotorEletrico();
+            motor1.setCompartimento(compartimento);
+            var wrapperMotor1 = wrapEquipamento(motor1);
+            wrappers.push(wrapperMotor1);
+            
+            var motor2 = new MotorEletrico();
+            motor2.setCompartimento(compartimento);
+            var wrapperMotor2 = wrapEquipamento(motor2);
+            wrappers.push(wrapperMotor2);
+            
+            var geradorMovimento1 = new GeradorMovimento();
+            geradorMovimento1.setCompartimento(compartimento);
+            var wrapperGeradorMovimento1 = wrapEquipamento(geradorMovimento1);
+            wrappers.push(wrapperGeradorMovimento1);
+            
+            var geradorMovimento2 = new GeradorMovimento();
+            geradorMovimento2.setCompartimento(compartimento);
+            var wrapperGeradorMovimento2 = wrapEquipamento(geradorMovimento2);
+            wrappers.push(wrapperGeradorMovimento2);
+            
+            
+    
+            var detetorPosicaoEstore1 = new DetetorPosicaoEstore();
+            detetorPosicaoEstore1.setCompartimento(compartimento);
+            var wrapperDetetorPosicaoEstore1 = wrapEquipamento(detetorPosicaoEstore1);
+            wrappers.push(wrapperDetetorPosicaoEstore1);
+            
+            var detetorPosicaoEstore2 = new DetetorPosicaoEstore();
+            detetorPosicaoEstore2.setCompartimento(compartimento);
+            var wrapperDetetorPosicaoEstore2 = wrapEquipamento(detetorPosicaoEstore2);
+            wrappers.push(wrapperDetetorPosicaoEstore2);
+            
+            var termometro1 = new Termometro();
+            termometro1.setCompartimento(compartimento);
+            var wrapperTermometro1 = wrapEquipamento(termometro1);
+            wrappers.push(wrapperTermometro1);
+            
+            var detetorMovimento1 = new DetetorMovimento();
+            detetorMovimento1.setCompartimento(compartimento);
+            var wrapperDetetorMovimento1 = wrapEquipamento(detetorMovimento1);
+            wrappers.push(wrapperDetetorMovimento1);
+            
+            var detetorMovimento2 = new DetetorMovimento();
+            detetorMovimento2.setCompartimento(compartimento);
+            var wrapperDetetorMovimento2 = wrapEquipamento(detetorMovimento2);
+            wrappers.push(wrapperDetetorMovimento2);
+            
+            var flowObject = [];
+            
+            
+            var marginX = 4;
+            var marginY = 15;
+            for(var i=0, x=marginX, y=marginY, maxHeight=0;i<wrappers.length;i++){
+                
+                flowObject[i] = addObject(flowCanvas,
+                    wrappers[i].equipamento.nome,
+                    wrappers[i].equipamento.compartimento.nome + '>' + wrappers[i].equipamento.nome);
+                flowObject[i].element.appendChild(wrappers[i].elemento);
+                
+                if(x + flowObject[i].element.offsetWidth + marginX > flowCanvas.element.offsetWidth){
+                    x = marginX;
+                    y += maxHeight + marginY;
+                    maxHeight = 0;
+                }
+                
+                maxHeight = flowObject[i].element.offsetHeight > maxHeight ? 
+                            flowObject[i].element.offsetHeight : maxHeight;
+
+                flowObject[i].element.style.left = x + 'px';
+                flowObject[i].element.style.top = y + 'px';
+
+                x += flowObject[i].element.offsetWidth + marginX;
+                
+            }
+            
+            var painel = new PainelMonotorizacao(compartimento);
+            document.body.appendChild(painel.table);
+        
+        </script>
+    
+    </body>
+
+</html>
+            

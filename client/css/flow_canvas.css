@@ -1,0 +1,115 @@
+ .flow-canvas {
+    position: relative;
+    background-color: #EEE;
+    padding: 0;
+    overflow: hidden;
+ }
+ 
+ .flow-draggable {
+    display: block;
+    position: absolute;
+    background-color: #666;
+    color: white;
+    padding: 0;
+    margin: 0;
+    top: 50px;
+    left: 50px;
+ }
+ 
+ .flow-canvas-svg  {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0px;
+    left: 0px; 
+    z-index: 0;
+    pointer-events: none;
+ }
+
+ .flow-cubic-line {
+    stroke:lightgreen;
+    stroke-width:5;
+    fill: transparent;
+ }
+ 
+
+ .flow-socket-svg {
+    width: 16px;
+    height: 16px;
+    display: block;
+    padding: 0;
+    margin: 0;
+ }
+ 
+ .flow-socket-connection {
+    stroke:lightskyblue;
+    stroke-width:5;
+    fill: transparent;
+ }
+ 
+ .flow-socket-circle {
+    stroke: white;
+    stroke-width: 2px;
+    fill: transparent;
+ }
+ 
+ .flow-socket-circle-action {
+    stroke: white;
+    stroke-width: 2px;
+    fill: lightgreen;
+ }
+ 
+ .flow-socket-circle-connected {
+    stroke: white;
+    stroke-width: 2px;
+    fill: lightskyblue;
+ }
+ 
+ .flow-object {
+    position: absolute;
+    background-color: rgb(221,221,221);
+    padding: 0;
+    margin: 0;
+    min-width: 100px;
+    min-height: 100px;
+    opacity: 0.90;
+    border-radius: 10px;
+ }
+ 
+ .flow-object-draggable-area {
+    border-radius: 10px 10px 0 0;
+    background-color: rgb(198, 54, 77);
+    padding: 0;
+    margin: 0;
+    min-width: 100%;
+    min-height: 20px;
+ }
+ 
+ .flow-object-title {
+    padding: 10px;
+    padding-top: 8px;
+    padding-bottom: 4px;
+    margin: 0;
+    text-align: center;
+    font-size: 16px;
+    pointer-events: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color: rgb(189, 205, 56);
+ }
+ 
+ .disable-select {
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+ }
+ 

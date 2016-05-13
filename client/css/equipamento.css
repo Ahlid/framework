@@ -1,0 +1,104 @@
+.wrapper-equipamento {
+    display: block;
+    border-collapse: collapse;
+    border-style: dashed;
+    border-width: 2px;
+    text-align: center;
+    padding: 5px;
+    /*border-radius: 0 0 10px 10px;*/
+}
+
+.equipamento-identificado {
+    
+}
+
+.equipamento-identificado h5 {
+    text-align: left;
+    margin: 0;
+    margin-bottom: 3px;
+    padding: 0;
+    width: 100%;
+    display: block;
+}
+
+.impacto-local {
+    text-align: center;
+}
+
+.impacto-local select{
+    margin: 0;
+    padding: 0;
+    display: block;
+    margin: 0 auto;
+}
+
+.impacto-local h5{
+    margin: 0;
+    padding: 0;
+    display: block;
+    text-align: left;
+}
+
+.impacto-local h5:hover{
+    cursor: pointer;
+    color: rgb(198, 54, 77);
+}
+
+.motor-eletrico  h3 {
+    margin: 4px;
+    padding: 0;
+    display: block;
+}
+
+.motor-eletrico h3:hover {
+    cursor: pointer;
+    color: rgb(198, 54, 77);
+}
+
+.motor-eletrico img {
+    margin: 0;
+    padding: 0;
+    
+}
+
+.motor-eletrico  img:hover {
+    cursor: pointer;
+}
+
+
+.ar-condicionado input{
+    display: block;
+    width: 50px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.ar-condicionado h3 {
+    margin: 0;
+    padding: 0;
+    display: block;
+}
+
+.ar-condicionado h3:hover{
+    cursor: pointer;
+    color: rgb(198, 54, 77);
+}
+
+.ar-condicionado img:hover{
+    cursor: pointer;
+}
+
+.termometro h3 {
+    margin: 0;
+    padding: 0;
+    display: block;
+    margin: 0 auto;
+}
+
+.gerador-movimento img{
+    cursor: pointer;
+}
+
+.trinco-eletrico img{
+    cursor: pointer;
+}
