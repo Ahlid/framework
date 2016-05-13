@@ -1,17 +1,17 @@
-function Alteravel(){
-    
+function Alteravel() {
+
     this.changeHandlers = [];
 }
 
-Alteravel.prototype.adicionarChangeListener = function (listener){
-    
+Alteravel.prototype.adicionarChangeListener = function(listener) {
+
     this.changeHandlers.push(listener);
-    
+
 }
 
-Alteravel.prototype.enviarChangeEvent = function(event){
-    this.changeHandlers.forEach(function(handler){
-       handler(event); 
+Alteravel.prototype.enviarChangeEvent = function(event) {
+    this.changeHandlers.forEach(function(handler) {
+        handler(event);
     });
 }
 
@@ -19,40 +19,43 @@ Alteravel.prototype.enviarChangeEvent = function(event){
 
 function Domotico(nome) {
     Alteravel.call(this);
-    var aux=nome||"Sistema Domótico"
+    var aux = nome || "Sistema Domótico"
     Object.defineProperty(this, 'nome', {
 
-            enumerable: true,
-            configurable: false,
-            get: function() {
-                return aux;
-            },
-            set: function(newValue) {
+        enumerable: true,
+        configurable: false,
+        get: function() {
+            return aux;
+        },
+        set: function(newValue) {
 
-                
-                    aux = newValue;
-                    this.enviarChangeEvent();
 
-                
+            aux = newValue;
+            this.enviarChangeEvent();
 
-            }
 
-        });
-    
-    
+
+        }
+
+    });
+
+
     this.consolas = [];
 
 }
 Domotico.prototype = Object.create(Alteravel.prototype);
 Domotico.prototype.constructor = Domotico;
+Domotico.prototype.hasConsola = function(nome) {
+    return this.consolas.some(consola => consola.nome == nome);
+}
 Domotico.prototype.criarConsola = function(nome) {
 
     var hasNomeConsola = this.consolas.some(consola => consola.nome == nome);
-   
+
     if (!hasNomeConsola) {
-        
-        var consola = new Consola(nome);
-        
+
+        var consola = new Consola(nome, this);
+
         this.consolas.push(consola);
         this.enviarChangeEvent();
     }
@@ -61,11 +64,11 @@ Domotico.prototype.criarConsola = function(nome) {
 Domotico.prototype.apagarConsola = function(nome) {
 
     this.consolas.forEach(function(consola, index, array) {
-        
+
         if (consola.nome == nome) {
 
             array.splice(index, 1);
-            
+
         }
 
     });
@@ -75,12 +78,37 @@ Domotico.prototype.apagarConsola = function(nome) {
 
 
 
-function Consola(nome) {
-    if(nome == void 0){
+function Consola(nome, domotico) {
+    if (nome == void 0) {
         throw Error('Nome nao pode ser vazio');
     }
     Alteravel.call(this);
-    this.nome=nome;//Todo: cuidado com os acessos
+    this.domotico = domotico;
+    Object.defineProperty(this, 'nome', {
+
+        enumerable: true,
+        configurable: false,
+        get: function() {
+            return nome;
+        },
+        set: function(newValue) {
+
+            if (domotico !== void 0) {
+                nome = this.domotico.hasConsola(newValue) ? nome : newValue;
+                this.enviarChangeEvent();
+            }
+            else {
+                nome = newValue;
+                this.enviarChangeEvent();
+            }
+
+
+
+        }
+
+    });
+
+
     this.compartimentos = []; //Todo: cuidado com os acessos
 
 }
@@ -88,8 +116,8 @@ Consola.prototype = Object.create(Alteravel.prototype);
 Consola.prototype.constructor = Consola;
 Consola.prototype.criarCompartimento = function(nome) {
 
-    var hasNomeCompartimento = this.compartimentos.some(compartimento => 
-            compartimento.nome == nome);
+    var hasNomeCompartimento = this.compartimentos.some(compartimento =>
+        compartimento.nome == nome);
 
 
     if (!hasNomeCompartimento) {
@@ -101,21 +129,22 @@ Consola.prototype.criarCompartimento = function(nome) {
 
 
 }
-
 Consola.prototype.apagarCompartimento = function(nome) {
-
-    this.compartimentos.foreach(function(index, compartimento, array) {
+    this.compartimentos.forEach(function(compartimento, index, array) {
 
         if (compartimento.nome == nome) {
-
             array.splice(index, 1);
             this.enviarChangeEvent();
         }
 
-    });
+    }.bind(this));
 
 }
-
+Consola.prototype.setSistema = function(domotico) {
+    if (domotico !== void 0) {
+        this.domotico = domotico;
+    }
+}
 
 
 /**
@@ -143,11 +172,11 @@ Compartimento.prototype.adicionarEquipamento = function(equipamento) {
     if (equipamento === void 0)
         return;
 
-    if (this.equipamentos.indexOf(equipamento) == -1){
+    if (this.equipamentos.indexOf(equipamento) == -1) {
         this.equipamentos.push(equipamento);
         this.enviarChangeEvent();
     }
-        
+
 
     if (!equipamento.isChildOf(this))
         equipamento.setCompartimento(this);
@@ -164,11 +193,11 @@ Compartimento.prototype.removerEquipamento = function(equipamento) {
 
     var index = this.equipamentos.indexOf(equipamento);
 
-    if (index != -1){
+    if (index != -1) {
         this.equipamentos.splice(index, 1);
         this.enviarChangeEvent();
     }
-        
+
 
 }
 
@@ -179,17 +208,17 @@ Compartimento.prototype.removerEquipamento = function(equipamento) {
  * 
  * 
  * */
-var Equipamento = (function(){
+var Equipamento = (function() {
 
-    return function (nome, compartimento) {
-    
+    return function(nome, compartimento) {
+
         //Todo: Validações
         this.nome = nome;
         this.compartimento = compartimento; //Todo: cuidado com os acessos
         Alteravel.call(this);
 
     }
-    
+
 })();
 
 Equipamento.prototype = Object.create(Alteravel.prototype);
