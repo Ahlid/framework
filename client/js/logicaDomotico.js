@@ -114,6 +114,10 @@ function Consola(nome, domotico) {
 }
 Consola.prototype = Object.create(Alteravel.prototype);
 Consola.prototype.constructor = Consola;
+Consola.prototype.hasCompartimento=function(nome){
+  return   this.compartimentos.some(compartimento =>
+        compartimento.nome == nome);
+}
 Consola.prototype.criarCompartimento = function(nome) {
 
     var hasNomeCompartimento = this.compartimentos.some(compartimento =>
@@ -122,7 +126,7 @@ Consola.prototype.criarCompartimento = function(nome) {
 
     if (!hasNomeCompartimento) {
 
-        var compartimento = new Compartimento(nome);
+        var compartimento = new Compartimento(nome,this);
         this.compartimentos.push(compartimento);
         this.enviarChangeEvent();
     }
@@ -154,14 +158,37 @@ Consola.prototype.setSistema = function(domotico) {
  * 
  * 
  * */
-function Compartimento(nome) {
-
+function Compartimento(nome,consola) {
+  Alteravel.call(this);
     //Todo: Validações
-
-    this.nome = nome;
+    this.consola=consola;
     this.equipamentos = []; //Todo: cuidado com os 
-    Alteravel.call(this);
+  
+    
+    Object.defineProperty(this, 'nome', {
 
+        enumerable: true,
+        configurable: false,
+        get: function() {
+            return nome;
+        },
+        set: function(newValue) {
+
+            if (consola !== void 0) {
+                nome = this.consola.hasCompartimento(newValue) ? nome : newValue;
+                this.enviarChangeEvent();
+            }
+            else {
+                nome = newValue;
+                this.enviarChangeEvent();
+            }
+
+
+
+        }
+
+    });
+    
 }
 
 Compartimento.prototype = Object.create(Alteravel.prototype);

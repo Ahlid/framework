@@ -231,8 +231,11 @@ var PainelConsola = function(consola) {
 
     //vamos agora criar os filhos que sao as consolas
     var compartimentos = consola.compartimentos;
-    this.criarLi(this.ul, compartimentos, function() {
-        alert("oi");
+    this.criarLi(this.ul, compartimentos, function(compartimento) {
+        var painelCompartimento= new PainelCompartimento(compartimento);
+        painelCompartimento.aplicar();
+        
+        
     });
 
     //botao de criar
@@ -278,7 +281,12 @@ var PainelConsola = function(consola) {
     consola.adicionarChangeListener(function() {
         this.nome.textContent = consola.nome;
         var compartimentos = consola.compartimentos;
-        this.criarLi(this.ul, compartimentos);
+        this.criarLi(this.ul, compartimentos, function(compartimento) {
+        var painelCompartimento= new PainelCompartimento(compartimento);
+        painelCompartimento.aplicar();
+        
+        
+    });
     }.bind(this));
     
     //botao de sistema domotico
@@ -302,8 +310,120 @@ PainelConsola.prototype = Object.create(Painel.prototype);
 PainelConsola.prototype.constructor = PainelConsola;
 
 var PainelCompartimento = function(compartimento) {
+Painel.call(this);
+
+
+    //meter a classe do elemento para domotico
+    this.elemento.setAttribute('class', ' consola');
+
+    //meter o nome do painel
+    this.nome.textContent = compartimento.nome;
+
+
+    //titulo antes do ul
+    this.subNome.textContent = "Compartimentos:"
+
+    //click no nome
+    this.nome.onclick = function(e) {
+
+        var parent = this.elemento;
+        var input = document.createElement('input');
+
+        parent.replaceChild(input, this.nome);
+        input.focus();
+
+        input.onblur = function(e) {
+            console.log(input.value);
+            compartimento.nome = input.value;
+
+            parent.replaceChild(this.nome, input);
+        }.bind(this);
+
+        input.onkeypress = function(event) {
+            var enterKeyCode = 13;
+            if (event.which === enterKeyCode || event.keyCode === enterKeyCode) {
+                input.blur();
+                return false;
+            }
+            return true;
+        }.bind(this);
+
+
+    }.bind(this);
+
+    //vamos agora criar os filhos que sao as consolas
+    var equipamentos = compartimento.equipamentos;
+    this.criarLi(this.ul, equipamentos, function() {
+        alert("oi");
+    });
+
+    //botao de criar
+    this.criar.onclick = function(e) {
+        alert("criar");
+    }
+
+    //botao de remover
+    this.remover.onclick = function(e) {
+
+        var checkboxes = document.getElementsByName('checkRemove');
+        var nomes = [];
+
+
+        for (var i = 0; i < checkboxes.length; i++) {
+
+            if (checkboxes[i].checked == true)
+                nomes.push(checkboxes[i].value);
+
+        }
+        console.log("remover");
+        //nomes.forEach(nome => compartimento.removerEquipamento(nome));
+
+    }
+
+    //botao de remover
+    this.selectAll.onclick = function(e) {
+
+        var checkBoxes = document.getElementsByName('checkRemove');
+        var nomes = [];
+
+        for (var i = 0; i < checkBoxes.length; i++)
+            checkBoxes[i].checked = true;
+
+
+    }
+    
+    
+    
+
+
+    //listener de mudancas
+    compartimento.adicionarChangeListener(function() {
+        this.nome.textContent = compartimento.nome;
+        var equipamentos = compartimento.equipamentos;
+        this.criarLi(this.ul, equipamentos,function(){
+            console.log("oi");
+        });
+    }.bind(this));
+    
+    //botao de sistema domotico
+    this.consola = document.createElement("button");
+    this.consola.textContent = "Consola";
+    
+    this.consola.onclick=function(e){
+        if(compartimento.consola !== void 0){
+        var painelConsola = new PainelConsola(compartimento.consola);
+        painelConsola.aplicar();
+        }else{
+            alert("Esta consola nao pertence a nenhum sistema domotico");
+        }
+    }
+    
+    this.elemento.appendChild(this.consola);
+
 
 }
+PainelCompartimento.prototype = Object.create(Painel.prototype);
+PainelCompartimento.prototype.constructor = PainelCompartimento;
 
 
 //TODO: Poder alterar o compartimento sem ter que criar outro painel
