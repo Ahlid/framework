@@ -241,6 +241,7 @@ var Equipamento = (function() {
 
         //Todo: Validações
         this.nome = nome;
+        
         this.compartimento = compartimento; //Todo: cuidado com os acessos
         Alteravel.call(this);
 

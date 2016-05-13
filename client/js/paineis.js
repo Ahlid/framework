@@ -359,7 +359,22 @@ Painel.call(this);
 
     //botao de criar
     this.criar.onclick = function(e) {
-        alert("criar");
+        var stringAMostrar="";
+         
+        var mapIter = equipamentoMap.keys();
+        for (var aux of mapIter) {
+            stringAMostrar+=aux+"|"
+        }
+        
+      var tipo=  prompt("Indique o nome do equipamento a criar: ",stringAMostrar);
+      
+      if(equipamentoMap.get(tipo)){
+         var eq = getEquipamento(tipo);
+         console.log(eq);
+         compartimento.adicionarEquipamento(eq);
+         console.log(compartimento.equipamentos);
+      }
+        
     }
 
     //botao de remover
@@ -449,5 +464,30 @@ var PainelMonotorizacao = function(compartimento) {
 
 
     }, this);
+
+}
+
+
+
+
+var equipamentoMap = new Map();
+equipamentoMap.set("MotorEletrico",MotorEletrico);
+equipamentoMap.set("TrincoEletrico",TrincoEletrico);
+equipamentoMap.set("GeradorMovimento",GeradorMovimento);
+equipamentoMap.set("ArCondicionado",ArCondicionado);
+equipamentoMap.set("Termometro",Termometro);
+equipamentoMap.set("DetetorFecho",DetetorFecho);
+equipamentoMap.set("DetetorMovimento",DetetorMovimento);
+equipamentoMap.set("DetetorPosicaoEstore",DetetorPosicaoEstore);
+
+
+
+function getEquipamento(equipamento) {
+
+    for (var [key, value] of equipamentoMap) {
+        if (equipamento == key) {
+            return new value();
+        }
+    }
 
 }

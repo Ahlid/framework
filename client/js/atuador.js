@@ -43,7 +43,7 @@ function EquipamentoImpactoLocal(sigla, sensoresValidos, compartimento, sensor) 
     Atuador.call(this, sigla, compartimento);
 
     this.sensoresValidos = sensoresValidos; //todo:restriçoes
-    this.sensor = this.isSensorValido(sensor) ? sensor : void 0; //todo:restriçoes
+    this.sensor = this.sensoresValidos.some(classeSensor => sensor instanceof classeSensor) ? sensor : void 0; //todo:restriçoes
 
 }
 EquipamentoImpactoLocal.prototype = Object.create(Atuador.prototype);
