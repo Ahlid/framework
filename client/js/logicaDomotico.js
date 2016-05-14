@@ -1,4 +1,3 @@
-
 /**
  * Representa um objeto que pode ser alteravel.
  * Esta classe possibilita registar eventos de alteração
@@ -32,12 +31,12 @@ Alteravel.prototype.enviarChangeEvent = function(event) {
  * @param {String} nome - O nome do sistema domotico
  */
 function Domotico(nome) {
-    
+
     Alteravel.call(this);
     //TODO: O nome não convem ser vazio
     var aux = nome || "Sistema Domótico";
     this.consolas = [];
-    
+
     Object.defineProperty(this, 'nome', {
 
         enumerable: true,
@@ -46,8 +45,10 @@ function Domotico(nome) {
             return aux;
         },
         set: function(newValue) {
-            aux = newValue;
-            this.enviarChangeEvent();
+            if (newValue && /\S/.test(newValue)) {
+                aux = newValue;
+                this.enviarChangeEvent();
+            }
         }
 
     });
@@ -69,7 +70,7 @@ Domotico.prototype.hasConsola = function(nome) {
  * @param {String} nome - nome da consola
  */
 Domotico.prototype.criarConsola = function(nome) {
-    
+
     var hasNomeConsola = this.consolas.some(consola => consola.nome == nome);
 
     if (!hasNomeConsola) {
@@ -78,7 +79,7 @@ Domotico.prototype.criarConsola = function(nome) {
 
         this.consolas.push(consola);
         this.enviarChangeEvent();
-        
+
     }
 
 }
@@ -88,14 +89,14 @@ Domotico.prototype.criarConsola = function(nome) {
  * @param {String} nome - nome da consola a apagar
  */
 Domotico.prototype.apagarConsola = function(nome) {
-    
+
     this.consolas.forEach(function(consola, index, array) {
 
-        if (consola.nome == nome) 
+        if (consola.nome == nome)
             array.splice(index, 1);
 
     });
-    
+
     this.enviarChangeEvent();
 
 }
@@ -107,15 +108,15 @@ Domotico.prototype.apagarConsola = function(nome) {
  * @param {Domotico} domotico - O sistema domotico
  */
 function Consola(nome, domotico) {
-    
-    if (nome == void 0) 
+
+    if (nome == void 0)
         throw Error('Nome nao pode ser vazio');
-    
+
     Alteravel.call(this);
-    
+
     this.domotico = domotico;
     this.compartimentos = []; //Todo: cuidado com os acessos
-    
+
     Object.defineProperty(this, 'nome', {
 
         enumerable: true,
@@ -124,16 +125,17 @@ function Consola(nome, domotico) {
             return nome;
         },
         set: function(newValue) {
+            if (newValue && /\S/.test(newValue)) {
+                if (domotico !== void 0) {
+                    nome = this.domotico.hasConsola(newValue) ? nome : newValue;
+                    this.enviarChangeEvent();
+                }
+                else {
+                    nome = newValue;
+                    this.enviarChangeEvent();
+                }
+            }
 
-            if (domotico !== void 0) {
-                nome = this.domotico.hasConsola(newValue) ? nome : newValue;
-                this.enviarChangeEvent();
-            }
-            else {
-                nome = newValue;
-                this.enviarChangeEvent();
-            }
-            
         }
 
     });
@@ -148,8 +150,8 @@ Consola.prototype.constructor = Consola;
  * @param {String} nome - O nome da compartimento a testar
  * @returns {Boolean}
  */
-Consola.prototype.hasCompartimento=function(nome){
-  return   this.compartimentos.some(compartimento =>
+Consola.prototype.hasCompartimento = function(nome) {
+    return this.compartimentos.some(compartimento =>
         compartimento.nome == nome);
 }
 
@@ -164,7 +166,7 @@ Consola.prototype.criarCompartimento = function(nome) {
 
     if (!hasNomeCompartimento) {
 
-        var compartimento = new Compartimento(nome,this);
+        var compartimento = new Compartimento(nome, this);
         this.compartimentos.push(compartimento);
         this.enviarChangeEvent();
     }
@@ -200,13 +202,13 @@ Consola.prototype.setSistema = function(domotico) {
  * 
  * 
  * */
-function Compartimento(nome,consola) {
-  Alteravel.call(this);
+function Compartimento(nome, consola) {
+    Alteravel.call(this);
     //Todo: Validações
-    this.consola=consola;
+    this.consola = consola;
     this.equipamentos = []; //Todo: cuidado com os 
-  
-    
+
+
     Object.defineProperty(this, 'nome', {
 
         enumerable: true,
@@ -215,14 +217,15 @@ function Compartimento(nome,consola) {
             return nome;
         },
         set: function(newValue) {
-
-            if (consola !== void 0) {
-                nome = this.consola.hasCompartimento(newValue) ? nome : newValue;
-                this.enviarChangeEvent();
-            }
-            else {
-                nome = newValue;
-                this.enviarChangeEvent();
+            if (newValue && /\S/.test(newValue)) {
+                if (consola !== void 0) {
+                    nome = this.consola.hasCompartimento(newValue) ? nome : newValue;
+                    this.enviarChangeEvent();
+                }
+                else {
+                    nome = newValue;
+                    this.enviarChangeEvent();
+                }
             }
 
 
@@ -230,7 +233,7 @@ function Compartimento(nome,consola) {
         }
 
     });
-    
+
 }
 
 Compartimento.prototype = Object.create(Alteravel.prototype);
@@ -249,15 +252,17 @@ Compartimento.prototype.adicionarEquipamento = function(equipamento) {
 
     if (!equipamento.isChildOf(this))
         equipamento.setCompartimento(this);
-        
+
 
 }
 
-Compartimento.prototype.removerEquipamento = function(equipamento) {
-
+Compartimento.prototype.removerEquipamento = function(nome) {
+    
+    
+var equipamento=this.getEquipamento(nome);
     if (equipamento === void 0)
         return;
-
+    
     if (equipamento.compartimento === this)
         equipamento.removerCompartimento();
 
@@ -271,6 +276,17 @@ Compartimento.prototype.removerEquipamento = function(equipamento) {
 
 }
 
+Compartimento.prototype.getEquipamento=function(nome){
+        var eq;
+        this.equipamentos.forEach(function(equipamento){
+            
+            if(equipamento.nome == nome ){
+                eq= equipamento;
+            }
+        });
+        
+        return eq;
+    }
 /**
  * 
  * 
@@ -284,7 +300,7 @@ var Equipamento = (function() {
 
         //Todo: Validações
         this.nome = nome;
-        
+
         this.compartimento = compartimento; //Todo: cuidado com os acessos
         Alteravel.call(this);
 

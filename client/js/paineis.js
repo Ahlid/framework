@@ -13,6 +13,8 @@ var Painel = function() {
             var consolaSpan = document.createElement('span');
 
             consolaSpan.textContent = elemento.nome;
+           
+            consolaSpan.setAttribute('class','clickable');
             consolaSpan.onclick = function(e) {
 
                 if (callback !== void 0)
@@ -39,10 +41,12 @@ var Painel = function() {
 
     //nome do Sistema
     this.nome = document.createElement('h2');
+    this.nome.setAttribute('class', 'title');
 
     //titulo antes do ul
     this.subNome = document.createElement('h4');
-
+    this.subNome.setAttribute('class', 'subTitle');
+    
     //a ul que guarda al li's com os elementos do array do objecto
     this.ul = document.createElement('ul');
 
@@ -61,6 +65,7 @@ var Painel = function() {
     this.elemento.appendChild(this.nome);
     this.elemento.appendChild(this.subNome);
     this.elemento.appendChild(this.ul);
+    this.elemento.appendChild(document.createElement("br"));
     this.elemento.appendChild(this.criar);
     this.elemento.appendChild(this.remover);
     this.elemento.appendChild(this.selectAll);
@@ -89,7 +94,7 @@ var PainelDomotico = function(domotico) {
     Painel.call(this);
 
     //meter a classe do elemento para domotico
-    this.elemento.setAttribute('class', ' domotico');
+    this.elemento.setAttribute('class', 'painel-domotico');
 
     //meter o nome do painel
     this.nome.textContent = domotico.nome;
@@ -102,7 +107,7 @@ var PainelDomotico = function(domotico) {
 
         var parent = this.elemento;
         var input = document.createElement('input');
-
+        input.value=this.nome.textContent;
         parent.replaceChild(input, this.nome);
         input.focus();
 
@@ -197,10 +202,10 @@ var PainelConsola = function(consola) {
     Painel.call(this);
 
     //meter a classe do elemento para domotico
-    this.elemento.setAttribute('class', 'consola');
+    this.elemento.setAttribute('class', 'painel-consola');
 
     //meter o nome do painel
-    this.nome.textContent = consola.nome;
+    this.nome.textContent = consola.nome || "Sistema Domotico";
 
     //titulo antes do ul
     this.subNome.textContent = "Compartimentos:"
@@ -213,9 +218,8 @@ var PainelConsola = function(consola) {
 
         parent.replaceChild(input, this.nome);
         input.focus();
-
+        input.value=this.nome.textContent
         input.onblur = function(e) {
-            console.log(input.value);
             consola.nome = input.value;
 
             parent.replaceChild(this.nome, input);
@@ -280,6 +284,8 @@ var PainelConsola = function(consola) {
     //listener de mudancas
     consola.adicionarChangeListener(function() {
         this.nome.textContent = consola.nome;
+        this.sistemaDomotico.textContent = consola.domotico.nome;
+
         var compartimentos = consola.compartimentos;
         this.criarLi(this.ul, compartimentos, function(compartimento) {
             var painelCompartimento = new PainelCompartimento(compartimento);
@@ -291,7 +297,7 @@ var PainelConsola = function(consola) {
 
     //botao de sistema domotico
     this.sistemaDomotico = document.createElement("button");
-    this.sistemaDomotico.textContent = "Sistema Domotico";
+    this.sistemaDomotico.textContent = consola.domotico.nome;
 
     this.sistemaDomotico.onclick = function(e) {
         if (consola.domotico !== void 0) {
@@ -319,7 +325,7 @@ var PainelCompartimento = function(compartimento) {
     Painel.call(this);
 
     //meter a classe do elemento para domotico
-    this.elemento.setAttribute('class', 'compartimento');
+    this.elemento.setAttribute('class', 'painel-compartimento');
 
     //meter o nome do painel
     this.nome.textContent = compartimento.nome;
@@ -332,13 +338,12 @@ var PainelCompartimento = function(compartimento) {
 
         var parent = this.elemento;
         var input = document.createElement('input');
-
+        input.value=this.nome.textContent;
         parent.replaceChild(input, this.nome);
         input.focus();
 
         input.onblur = function(e) {
 
-            console.log(input.value);
             compartimento.nome = input.value;
 
             parent.replaceChild(this.nome, input);
@@ -374,24 +379,18 @@ var PainelCompartimento = function(compartimento) {
 
         var tipo = prompt("Indique o nome do equipamento a criar: ", stringAMostrar);
 
-
-
-
-       
-     
         if(tipo!== void 0){
             
              tipo = tipo.split("|");
-                console.log(tipo);
-        for (var i = 0; i < tipo.length; i++) {
-            if (equipamentoMap.get(tipo[i])) {
-                var eq = getEquipamento(tipo[i]);
-
-                compartimento.adicionarEquipamento(eq);
-
+            for (var i = 0; i < tipo.length; i++) {
+                if (equipamentoMap.get(tipo[i])) {
+                    var eq = getEquipamento(tipo[i]);
+    
+                    compartimento.adicionarEquipamento(eq);
+    
+                }
+    
             }
-
-        }
         }
 
     }
@@ -409,8 +408,7 @@ var PainelCompartimento = function(compartimento) {
                 nomes.push(checkboxes[i].value);
 
         }
-        console.log("remover");
-        //nomes.forEach(nome => compartimento.removerEquipamento(nome));
+        nomes.forEach(nome => compartimento.removerEquipamento(nome));
 
     }
 
@@ -429,9 +427,9 @@ var PainelCompartimento = function(compartimento) {
     //listener de mudancas
     compartimento.adicionarChangeListener(function() {
         this.nome.textContent = compartimento.nome;
+        this.consola.textContent = compartimento.consola.nome||"Consola";
         var equipamentos = compartimento.equipamentos;
         this.criarLi(this.ul, equipamentos, function() {
-            console.log("oi");
         });
     }.bind(this));
     //botao de monitorizar
@@ -446,7 +444,7 @@ var PainelCompartimento = function(compartimento) {
 
     //botao de sistema domotico
     this.consola = document.createElement("button");
-    this.consola.textContent = "Consola";
+    this.consola.textContent = compartimento.consola.nome || "Consola";
 
     this.consola.onclick = function(e) {
         if (compartimento.consola !== void 0) {
@@ -475,35 +473,31 @@ PainelCompartimento.prototype.constructor = PainelCompartimento;
 var PainelMonotorizacao = function(compartimento) {
 
     this.elemento = document.createElement("div");
-    this.elemento.setAttribute('class', 'painel-motorizacao');
+    this.elemento.setAttribute('class', 'painel-monitorizacao');
     this.table = document.createElement('table');
     //botao compartimento
     this.botaoVoltar = document.createElement("button");
-    this.botaoVoltar.textContent = "voltar";
+    this.botaoVoltar.textContent = "Voltar";
 
     this.botaoVoltar.onclick = function(e) {
         var painelCompartimento = new PainelCompartimento(compartimento);
         painelCompartimento.aplicar();
     }
-
+    
     var i = 0;
     var tr;
-    
-   
     compartimento.equipamentos.forEach(function(equipamento) {
-
+        
         if (i == 0) {
             tr = document.createElement('tr');
             this.table.appendChild(tr);
         }
-
 
         var td = document.createElement('td');
         td.appendChild(wrapEquipamento(equipamento).elemento);
         tr.appendChild(td);
 
         i = (i + 1) % Math.ceil(Math.sqrt(compartimento.equipamentos.length));
-
 
     }, this);
 
@@ -524,6 +518,8 @@ equipamentoMap.set("Termometro", Termometro);
 equipamentoMap.set("DetetorFecho", DetetorFecho);
 equipamentoMap.set("DetetorMovimento", DetetorMovimento);
 equipamentoMap.set("DetetorPosicaoEstore", DetetorPosicaoEstore);
+equipamentoMap.set("DetetorIncendio", DetetorIncendio);
+equipamentoMap.set("GeradorIncendio", GeradorIncendio);
 
 function getEquipamento(equipamento) {
 

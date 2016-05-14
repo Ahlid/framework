@@ -174,3 +174,44 @@ var DetetorPosicaoEstore = (function() {
 
 DetetorPosicaoEstore.prototype = Object.create(Sensor.prototype);
 DetetorPosicaoEstore.prototype.constructor = DetetorPosicaoEstore;
+
+
+
+
+/**
+ *
+ * 
+ * 
+ * 
+ * 
+ * */
+var DetetorIncendio = (function() {
+
+    var ultimoId = 0;
+    var sigla = "DI";
+
+    return function(compartimento) {
+
+        this.acionado = false;
+        var nome = sigla + (++ultimoId);
+        Sensor.call(this, nome, compartimento);
+
+    };
+
+})();
+
+DetetorIncendio.prototype = Object.create(Sensor.prototype);
+DetetorIncendio.prototype.constructor = DetetorIncendio;
+
+DetetorIncendio.prototype.acionar = function() {
+
+    this.acionado = true;
+    this.enviarChangeEvent();
+
+}
+DetetorIncendio.prototype.desligar = function() {
+
+    this.acionado = false;
+    this.enviarChangeEvent();
+
+}

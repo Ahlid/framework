@@ -28,7 +28,7 @@
 
  .flow-cubic-line {
     stroke:lightgreen;
-    stroke-width:5;
+    stroke-width: 5;
     fill: transparent;
  }
  
@@ -103,13 +103,11 @@
  }
  
  .disable-select {
-
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-
  }
  

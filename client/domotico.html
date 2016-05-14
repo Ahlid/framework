@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+    <html lang="pt-PT">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Domotico PI</title>
+        
+        <link rel="stylesheet" type="text/css" href="css/equipamento.css">
+        <link rel="stylesheet" type="text/css" href="css/flow_canvas.css">
+        
+        <script src="js/Domotico.js"></script>
+    </head>
+
+    <body>
+         <div id="sistema">
+            
+        </div>
+        <script>
+           
+            var domotico=new Domotico();
+            var painelDomotico=new PainelDomotico(domotico);
+            
+            domotico.criarConsola("Piso -1");
+            domotico.criarConsola("Piso 0");
+            domotico.criarConsola("Piso 1");
+            domotico.criarConsola("Piso 2");
+            domotico.criarConsola("Garagem");
+            painelDomotico.aplicar();
+            
+        </script>
+        
+        
+       
+    </body>
+
+    </html>
+    

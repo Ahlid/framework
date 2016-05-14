@@ -1,53 +1,67 @@
+@font-face {
+    font-family: MaiandraGDRegular;
+    src: url(../fonts/MaiandraGDRegular.ttf);
+}
+
+body {
+    background-size: cover;
+    background-position: fixed;
+    background-color: 	#F5F5DC;
+}
+
 .wrapper-equipamento {
-    display: block;
-    border-collapse: collapse;
-    border-style: dashed;
-    border-width: 2px;
     text-align: center;
+    display: block;
+    margin: 0;
     padding: 5px;
-    /*border-radius: 0 0 10px 10px;*/
+    width: calc(160px * 1);
+    height: calc(200px * 1);
+    font-family: MaiandraGDRegular;
+    background: #d2d2d2; /* Old browsers */
+    background: -moz-linear-gradient(top,  #d2d2d2 0%, #b7b7b7 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top,  #d2d2d2 0%,#b7b7b7 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom,  #d2d2d2 0%,#b7b7b7 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d2d2d2', endColorstr='#b7b7b7',GradientType=0 ); /* IE6-9 */
+  
 }
 
 .equipamento-identificado {
-    
+
 }
 
 .equipamento-identificado h5 {
-    text-align: left;
     margin: 0;
     margin-bottom: 3px;
     padding: 0;
-    width: 100%;
-    display: block;
+    color: #3b3b3b;
 }
 
 .impacto-local {
     text-align: center;
 }
 
-.impacto-local select{
+.impacto-local select {
     margin: 0;
     padding: 0;
     display: block;
     margin: 0 auto;
 }
 
-.impacto-local h5{
+.impacto-local h5 {
     margin: 0;
     padding: 0;
-    display: block;
-    text-align: left;
+   
 }
 
-.impacto-local h5:hover{
+.impacto-local h5:hover {
     cursor: pointer;
     color: rgb(198, 54, 77);
 }
 
-.motor-eletrico  h3 {
+.motor-eletrico h3 {
     margin: 4px;
     padding: 0;
-    display: block;
+    
 }
 
 .motor-eletrico h3:hover {
@@ -58,15 +72,13 @@
 .motor-eletrico img {
     margin: 0;
     padding: 0;
-    
 }
 
-.motor-eletrico  img:hover {
+.motor-eletrico img:hover {
     cursor: pointer;
 }
 
-
-.ar-condicionado input{
+.ar-condicionado input {
     display: block;
     width: 50px;
     margin: 0 auto;
@@ -76,29 +88,48 @@
 .ar-condicionado h3 {
     margin: 0;
     padding: 0;
-    display: block;
+   
 }
 
-.ar-condicionado h3:hover{
+.ar-condicionado h3:hover {
     cursor: pointer;
     color: rgb(198, 54, 77);
-}
-
-.ar-condicionado img:hover{
-    cursor: pointer;
 }
 
 .termometro h3 {
     margin: 0;
     padding: 0;
-    display: block;
     margin: 0 auto;
 }
 
-.gerador-movimento img{
+.gerador-movimento img {
     cursor: pointer;
 }
 
-.trinco-eletrico img{
+.detetor-incendio img {
+    max-height: 90px;
+    max-width: 90px;
+}
+
+.gerador-incendio:hover {
     cursor: pointer;
+}
+
+.wrapper-icon-svg {
+   margin-top: 10px;
+}
+ 
+.wrapper-icon-svg-path-idle {
+    fill: #3b3b3b;
+    fill-rule: evenodd;
+}
+
+.wrapper-icon-svg-path-hover {
+    fill: #919191;
+    fill-rule: evenodd;
+}
+
+.wrapper-icon-svg-path-working {
+    fill: #ee4e4e;
+    fill-rule: evenodd;
 }

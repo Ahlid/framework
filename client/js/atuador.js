@@ -128,7 +128,6 @@ ArCondicionado.prototype.acionar = function() {
             return equipamento instanceof Termometro;
         }).forEach(function(equipamento) {
             equipamento.temperatura = this.temperatura;
-            console.log(equipamento);
         }, this);
 
     }
@@ -177,7 +176,6 @@ GeradorMovimento.prototype.gerarMovimento = function() {
         this.movimento = true; // o gerador fica em moviemento
         this.enviarChangeEvent();
         var equipamentosCompartimento = this.compartimento.equipamentos; //vamos obter os equipamentos do compartimento
-        console.log(equipamentosCompartimento);
         equipamentosCompartimento.filter(function(equipamento) {
             return (equipamento instanceof DetetorMovimento);
         }).forEach(function(equipamento) { //por cada equipamento se for um Detetor de movimento devemos aciona-lo
@@ -282,11 +280,9 @@ var MotorEletrico = (function() {
             enumerable: true,
             configurable: false,
             get: function() {
-                console.log(posicao);
                 return posicao;
             },
             set: function(newValue) {
-                //console.log(newValue);
                 if (POSICOES.hasOwnProperty(newValue)) {
                     posicao = newValue;
                     this.enviarChangeEvent();
@@ -309,3 +305,92 @@ MotorEletrico.prototype.aplicar = function() {
     this.sensor.posicao = this.posicao;
     }
 }
+
+
+
+
+/**
+ * 
+ * 
+ * 
+ * 
+ * 
+ * */
+var GeradorIncendio = (function() {
+
+    var ultimoId = 0;
+    var temFogo = false;
+    var sigla = 'GI';
+
+    return function(compartimento) {
+
+        this.temFogo = temFogo;
+        var nome = sigla + (++ultimoId);
+        EquipamentoImpactoGeral.call(this, nome, compartimento);
+
+    };
+
+})();
+
+GeradorIncendio.prototype = Object.create(EquipamentoImpactoGeral.prototype);
+GeradorIncendio.prototype.constructor = GeradorIncendio;
+GeradorIncendio.prototype.commutar = function() {
+
+    if (this.temFogo)
+        this.pararFogo();
+    else
+        this.gerarFogo();
+
+}
+GeradorIncendio.prototype.gerarFogo = function() {
+
+    if (this.temFogo)
+        return;
+
+    if (this.compartimento != void 0) {
+
+        this.temFogo = true; // o gerador fica em moviemento
+        this.enviarChangeEvent();
+        var equipamentosCompartimento = this.compartimento.equipamentos; //vamos obter os equipamentos do compartimento
+        
+        equipamentosCompartimento.filter(function(equipamento) {
+            return (equipamento instanceof DetetorIncendio);
+        }).forEach(function(equipamento) { //por cada equipamento se for um Detetor de movimento devemos aciona-lo
+            equipamento.acionar();
+        });
+
+
+    }
+}
+GeradorIncendio.prototype.pararFogo = function() {
+
+        if (!this.temFogo)
+            return;
+
+        if (this.compartimento != void 0) { //se tiver em algum compartimento
+
+            this.temFogo = false; //o gerador deixa de gerar movimento
+            this.enviarChangeEvent();
+            var equipamentosCompartimento = this.compartimento.equipamentos; //vamos obter os equipamentos
+            //todo:verificar o codigo repetido
+            //vamos agora verificar se algum gerador ainda está em movimento
+            var existeFogo = equipamentosCompartimento.some(equipamento =>
+                (equipamento instanceof GeradorIncendio) && equipamento.temFogo);
+
+
+
+            equipamentosCompartimento.filter(function(equipamento) {
+                return (equipamento instanceof DetetorIncendio);
+            }).forEach(function(equipamento) { //por cada equipamento se for um Detetor de movimento devemos aciona-lo
+
+                if (existeFogo)
+                    equipamento.acionar();
+                else
+                    equipamento.desligar();
+            });
+
+
+
+        }
+
+    }
