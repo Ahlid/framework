@@ -182,48 +182,44 @@ GeradorMovimento.prototype.gerarMovimento = function() {
             equipamento.acionar();
         });
 
-
     }
 }
 GeradorMovimento.prototype.pararMovimento = function() {
 
-        if (!this.movimento)
-            return;
+    if (!this.movimento)
+        return;
 
-        if (this.compartimento != void 0) { //se tiver em algum compartimento
+    if (this.compartimento != void 0) { //se tiver em algum compartimento
 
-            this.movimento = false; //o gerador deixa de gerar movimento
-            this.enviarChangeEvent();
-            var equipamentosCompartimento = this.compartimento.equipamentos; //vamos obter os equipamentos
-            //todo:verificar o codigo repetido
-            //vamos agora verificar se algum gerador ainda está em movimento
-            var existeMovimento = equipamentosCompartimento.some(equipamento =>
-                (equipamento instanceof GeradorMovimento) && equipamento.movimento);
+        this.movimento = false; //o gerador deixa de gerar movimento
+        this.enviarChangeEvent();
+        var equipamentosCompartimento = this.compartimento.equipamentos; //vamos obter os equipamentos
+        //todo:verificar o codigo repetido
+        //vamos agora verificar se algum gerador ainda está em movimento
+        var existeMovimento = equipamentosCompartimento.some(equipamento =>
+            (equipamento instanceof GeradorMovimento) && equipamento.movimento);
 
+        equipamentosCompartimento.filter(function(equipamento) {
+            return (equipamento instanceof DetetorMovimento);
+        }).forEach(function(equipamento) { //por cada equipamento se for um Detetor de movimento devemos aciona-lo
 
-
-            equipamentosCompartimento.filter(function(equipamento) {
-                return (equipamento instanceof DetetorMovimento);
-            }).forEach(function(equipamento) { //por cada equipamento se for um Detetor de movimento devemos aciona-lo
-
-                if (existeMovimento)
-                    equipamento.acionar();
-                else
-                    equipamento.desligar();
-            });
-
-
-
-        }
+            if (existeMovimento)
+                equipamento.acionar();
+            else
+                equipamento.desligar();
+        });
 
     }
-    /**
-     * 
-     * 
-     * 
-     * 
-     * 
-     * */
+
+}
+    
+/**
+ * 
+ * 
+ * 
+ * 
+ * 
+ * */
 var TrincoEletrico = (function() {
 
     var sensoresValidos = [DetetorFecho];
@@ -246,7 +242,9 @@ TrincoEletrico.prototype.commutar = function() {
 
     this.ligado = !this.ligado;
     this.enviarChangeEvent();
-    this.sensor.setEstado(this.ligado);
+    
+    if(this.sensor !== void 0)
+        this.sensor.setEstado(this.ligado);
 
 }
 
@@ -301,9 +299,11 @@ var MotorEletrico = (function() {
 MotorEletrico.prototype = Object.create(EquipamentoImpactoLocal.prototype);
 MotorEletrico.prototype.constructor = MotorEletrico;
 MotorEletrico.prototype.aplicar = function() {
-    if(this.compartimento!= void 0){
-    this.sensor.posicao = this.posicao;
+    
+    if(this.compartimento!= void 0 && this.sensor !== void 0){
+        this.sensor.posicao = this.posicao;
     }
+    
 }
 
 

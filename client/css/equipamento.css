@@ -69,12 +69,8 @@ body {
     color: rgb(198, 54, 77);
 }
 
-.motor-eletrico img {
-    margin: 0;
-    padding: 0;
-}
 
-.motor-eletrico img:hover {
+.motor-eletrico:hover {
     cursor: pointer;
 }
 
@@ -102,16 +98,16 @@ body {
     margin: 0 auto;
 }
 
-.gerador-movimento img {
+.gerador-movimento {
     cursor: pointer;
 }
 
-.detetor-incendio img {
-    max-height: 90px;
-    max-width: 90px;
-}
 
 .gerador-incendio:hover {
+    cursor: pointer;
+}
+
+.trinco-eletrico:hover {
     cursor: pointer;
 }
 
