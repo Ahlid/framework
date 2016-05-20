@@ -16,18 +16,16 @@ Sensor.prototype.constructor = Sensor;
  * 
  * */
 var Termometro = (function() {
-
+    
     var ultimoId = 0;
     var sigla = "TM"
 
-    return function(compartimento) {
+    return function Termometro(compartimento) {
 
         var nome = sigla + (++ultimoId);
 
         Sensor.call(this, nome, compartimento);
 
-        var maxTemperature = 55;
-        var minTemperature = -55;
         var temperatura = temperatura || 25;
 
         Object.defineProperty(this, 'temperatura', {
@@ -39,24 +37,25 @@ var Termometro = (function() {
             },
             set: function(newValue) {
 
-                if (minTemperature < newValue && newValue < maxTemperature) {
+                if (Termometro.minTemperatura <= newValue && newValue <= Termometro.maxTemperatura) {
                     temperatura = newValue;
-                    this.enviarChangeEvent();
+                    this.enviarEventoAlterado();
                 }
 
             }
 
         });
 
-
-
     };
+    
+    
 
 })();
 
 Termometro.prototype = Object.create(Sensor.prototype);
 Termometro.prototype.constructor = Termometro;
-
+Termometro.maxTemperatura = 55;
+Termometro.minTemperatura = -55;
 
 /**
  *
@@ -86,13 +85,13 @@ DetetorMovimento.prototype.constructor = DetetorMovimento;
 DetetorMovimento.prototype.acionar = function() {
 
     this.acionado = true;
-    this.enviarChangeEvent();
+    this.enviarEventoAlterado();
 
 }
 DetetorMovimento.prototype.desligar = function() {
 
     this.acionado = false;
-    this.enviarChangeEvent();
+    this.enviarEventoAlterado();
 
 }
 
@@ -124,7 +123,7 @@ DetetorFecho.prototype.constructor = DetetorFecho;
 DetetorFecho.prototype.setEstado = function(ligado) {
 
     this.ligado = ligado;
-    this.enviarChangeEvent();
+    this.enviarEventoAlterado();
 
 }
 
@@ -137,6 +136,19 @@ DetetorFecho.prototype.setEstado = function(ligado) {
  * 
  * */
 var DetetorPosicaoEstore = (function() {
+    
+    /**
+     * Representa as posicoes que o estore pode ter
+     */
+    var POSICOES = {
+    
+        'ABERTO': 'Aberto',
+        'UM_TERCO': 'A um terço',
+        'MEIO_ABERTO': 'Meio aberto',
+        'A_DOIS_TERCOS': 'A dois terços',
+        'FECHADO': 'Fechado'
+    
+    };
 
     var ultimoId = 0;
     var sigla = "EE";
@@ -157,7 +169,7 @@ var DetetorPosicaoEstore = (function() {
 
                 if (POSICOES.hasOwnProperty(newValue)) {
                     posicao = newValue;
-                    this.enviarChangeEvent();
+                    this.enviarEventoAlterado();
 
                 }
 
@@ -206,12 +218,12 @@ DetetorIncendio.prototype.constructor = DetetorIncendio;
 DetetorIncendio.prototype.acionar = function() {
 
     this.acionado = true;
-    this.enviarChangeEvent();
+    this.enviarEventoAlterado();
 
 }
 DetetorIncendio.prototype.desligar = function() {
 
     this.acionado = false;
-    this.enviarChangeEvent();
+    this.enviarEventoAlterado();
 
 }

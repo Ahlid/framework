@@ -125,7 +125,14 @@ body {
     fill-rule: evenodd;
 }
 
+@keyframes example {
+    from {fill:;}
+    to {fill: #ee4e4e;}
+}
+
 .wrapper-icon-svg-path-working {
+    animation-name: example;
+    animation-duration: 1s;
     fill: #ee4e4e;
     fill-rule: evenodd;
 }

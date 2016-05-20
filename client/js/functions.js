@@ -192,8 +192,8 @@ function FlowCanvas(width,height){
     
     this.element = document.createElement('div');
     this.element.setAttribute('class','flow-canvas');
-    this.element.style.width = width + 'px';
-    this.element.style.height = height + 'px';
+  //  this.element.style.width = width + 'px';
+    //this.element.style.height = height + 'px';
 
     this.svgCanvas = document.createElementNS(svgNS ,'svg');
     this.svgCanvas.setAttributeNS(null,'class','flow-canvas-svg');

@@ -195,12 +195,10 @@
             
             
            
-            var domotico=new Domotico();
-            var painelDomotico=new PainelDomotico(domotico);
             
-            domotico.criarConsola("Piso -1");
+            var painelDomotico=new PainelDomotico(new Domotico());
             painelDomotico.aplicar();
-            var cp1=new Compartimento("Cozinha");
+            domotico.criarConsola("Piso -1");
             domotico.criarConsola("Piso 0");
             domotico.criarConsola("Piso 1");
             domotico.criarConsola("Piso 2");

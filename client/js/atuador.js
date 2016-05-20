@@ -83,14 +83,13 @@ var ArCondicionado = (function() {
 
     var ultimoId = 0;
     var sigla = 'AC';
+    
 
-    return function(compartimento, temperatura) {
+    return function ArCondicionado(compartimento, temperatura) {
 
         var nome = sigla + (++ultimoId);
         EquipamentoImpactoGeral.call(this, nome, compartimento);
 
-        var maxTemperature = 55;
-        var minTemperature = -55;
         var temperatura = temperatura || 25;
 
         Object.defineProperty(this, 'temperatura', {
@@ -102,22 +101,26 @@ var ArCondicionado = (function() {
             },
             set: function(newValue) {
 
-                if (minTemperature < newValue && newValue < maxTemperature) {
+                if (ArCondicionado.minTemperatura <= newValue && newValue <= ArCondicionado.maxTemperatura) {
                     temperatura = newValue;
-                    this.enviarChangeEvent();
+                    this.enviarEventoAlterado();
                 }
-
 
             }
 
         });
 
     };
+    
+    
 
 }());
 
+
 ArCondicionado.prototype = Object.create(EquipamentoImpactoGeral.prototype);
 ArCondicionado.prototype.constructor = ArCondicionado;
+ArCondicionado.maxTemperatura = 55;
+ArCondicionado.minTemperatura = -55;
 ArCondicionado.prototype.acionar = function() {
 
     if (this.compartimento != void 0) {
@@ -131,6 +134,9 @@ ArCondicionado.prototype.acionar = function() {
         }, this);
 
     }
+    
+    
+    
 }
 
 /**
@@ -174,7 +180,7 @@ GeradorMovimento.prototype.gerarMovimento = function() {
     if (this.compartimento != void 0) {
 
         this.movimento = true; // o gerador fica em moviemento
-        this.enviarChangeEvent();
+        this.enviarEventoAlterado();
         var equipamentosCompartimento = this.compartimento.equipamentos; //vamos obter os equipamentos do compartimento
         equipamentosCompartimento.filter(function(equipamento) {
             return (equipamento instanceof DetetorMovimento);
@@ -192,7 +198,7 @@ GeradorMovimento.prototype.pararMovimento = function() {
     if (this.compartimento != void 0) { //se tiver em algum compartimento
 
         this.movimento = false; //o gerador deixa de gerar movimento
-        this.enviarChangeEvent();
+        this.enviarEventoAlterado();
         var equipamentosCompartimento = this.compartimento.equipamentos; //vamos obter os equipamentos
         //todo:verificar o codigo repetido
         //vamos agora verificar se algum gerador ainda está em movimento
@@ -241,7 +247,7 @@ TrincoEletrico.prototype.constructor = TrincoEletrico;
 TrincoEletrico.prototype.commutar = function() {
 
     this.ligado = !this.ligado;
-    this.enviarChangeEvent();
+    this.enviarEventoAlterado();
     
     if(this.sensor !== void 0)
         this.sensor.setEstado(this.ligado);
@@ -261,7 +267,21 @@ TrincoEletrico.prototype.commutar = function() {
 
 
 var MotorEletrico = (function() {
+    
+    /**
+     * Representa as posicoes que o estore pode ter
+     */
+    var POSICOES = {
+    
+        'ABERTO': 'Aberto',
+        'UM_TERCO': 'A um terço',
+        'MEIO_ABERTO': 'Meio aberto',
+        'A_DOIS_TERCOS': 'A dois terços',
+        'FECHADO': 'Fechado'
+    
+    };
 
+    
     var listaSensores = [DetetorPosicaoEstore];
     var ultimoId = 0;
     var sigla = 'ME';
@@ -283,7 +303,7 @@ var MotorEletrico = (function() {
             set: function(newValue) {
                 if (POSICOES.hasOwnProperty(newValue)) {
                     posicao = newValue;
-                    this.enviarChangeEvent();
+                    this.enviarEventoAlterado();
 
                 }
 
@@ -349,8 +369,8 @@ GeradorIncendio.prototype.gerarFogo = function() {
 
     if (this.compartimento != void 0) {
 
-        this.temFogo = true; // o gerador fica em moviemento
-        this.enviarChangeEvent();
+        this.temFogo = true;
+        this.enviarEventoAlterado();
         var equipamentosCompartimento = this.compartimento.equipamentos; //vamos obter os equipamentos do compartimento
         
         equipamentosCompartimento.filter(function(equipamento) {
@@ -370,7 +390,7 @@ GeradorIncendio.prototype.pararFogo = function() {
         if (this.compartimento != void 0) { //se tiver em algum compartimento
 
             this.temFogo = false; //o gerador deixa de gerar movimento
-            this.enviarChangeEvent();
+            this.enviarEventoAlterado();
             var equipamentosCompartimento = this.compartimento.equipamentos; //vamos obter os equipamentos
             //todo:verificar o codigo repetido
             //vamos agora verificar se algum gerador ainda está em movimento
@@ -388,8 +408,6 @@ GeradorIncendio.prototype.pararFogo = function() {
                 else
                     equipamento.desligar();
             });
-
-
 
         }
 

@@ -19,7 +19,7 @@ Alteravel.prototype.adicionarChangeListener = function(listener) {
  * Envia um change event para todos os handlers
  * @param {Object} event - evento que irá ser lançado a todos os handlers registados
  */
-Alteravel.prototype.enviarChangeEvent = function(event) {
+Alteravel.prototype.enviarEventoAlterado = function(event) {
     this.changeHandlers.forEach(function(handler) {
         handler(event);
     });
@@ -47,7 +47,7 @@ function Domotico(nome) {
         set: function(newValue) {
             if (newValue && /\S/.test(newValue)) {
                 aux = newValue;
-                this.enviarChangeEvent();
+                this.enviarEventoAlterado();
             }
         }
 
@@ -78,7 +78,7 @@ Domotico.prototype.criarConsola = function(nome) {
         var consola = new Consola(nome, this);
 
         this.consolas.push(consola);
-        this.enviarChangeEvent();
+        this.enviarEventoAlterado();
 
     }
 
@@ -97,7 +97,7 @@ Domotico.prototype.apagarConsola = function(nome) {
 
     });
 
-    this.enviarChangeEvent();
+    this.enviarEventoAlterado();
 
 }
 
@@ -128,11 +128,11 @@ function Consola(nome, domotico) {
             if (newValue && /\S/.test(newValue)) {
                 if (domotico !== void 0) {
                     nome = this.domotico.hasConsola(newValue) ? nome : newValue;
-                    this.enviarChangeEvent();
+                    this.enviarEventoAlterado();
                 }
                 else {
                     nome = newValue;
-                    this.enviarChangeEvent();
+                    this.enviarEventoAlterado();
                 }
             }
 
@@ -168,7 +168,7 @@ Consola.prototype.criarCompartimento = function(nome) {
 
         var compartimento = new Compartimento(nome, this);
         this.compartimentos.push(compartimento);
-        this.enviarChangeEvent();
+        this.enviarEventoAlterado();
     }
 
 }
@@ -182,7 +182,7 @@ Consola.prototype.apagarCompartimento = function(nome) {
 
         if (compartimento.nome == nome) {
             array.splice(index, 1);
-            this.enviarChangeEvent();
+            this.enviarEventoAlterado();
         }
 
     }.bind(this));
@@ -220,11 +220,11 @@ function Compartimento(nome, consola) {
             if (newValue && /\S/.test(newValue)) {
                 if (consola !== void 0) {
                     nome = this.consola.hasCompartimento(newValue) ? nome : newValue;
-                    this.enviarChangeEvent();
+                    this.enviarEventoAlterado();
                 }
                 else {
                     nome = newValue;
-                    this.enviarChangeEvent();
+                    this.enviarEventoAlterado();
                 }
             }
 
@@ -246,7 +246,7 @@ Compartimento.prototype.adicionarEquipamento = function(equipamento) {
 
     if (this.equipamentos.indexOf(equipamento) == -1) {
         this.equipamentos.push(equipamento);
-        this.enviarChangeEvent();
+        this.enviarEventoAlterado();
     }
 
 
@@ -270,7 +270,7 @@ var equipamento=this.getEquipamento(nome);
 
     if (index != -1) {
         this.equipamentos.splice(index, 1);
-        this.enviarChangeEvent();
+        this.enviarEventoAlterado();
     }
 
 
@@ -325,7 +325,7 @@ Equipamento.prototype.setCompartimento = function(compartimento) {
     }
 
     this.compartimento = compartimento;
-    this.enviarChangeEvent();
+    this.enviarEventoAlterado();
     this.compartimento.adicionarEquipamento(this);
 
 }
@@ -342,7 +342,7 @@ Equipamento.prototype.removerCompartimento = function() {
 
         var compartimento = this.compartimento;
         this.compartimento = void 0;
-        this.enviarChangeEvent();
+        this.enviarEventoAlterado();
         compartimento.removerEquipamento(this);
 
     }
@@ -406,7 +406,7 @@ var Termometro = (function() {
 
                 if (minTemperature < newValue && newValue < maxTemperature) {
                     temperatura = newValue;
-                    this.enviarChangeEvent();
+                    this.enviarEventoAlterado();
                 }
 
             }
@@ -451,13 +451,13 @@ DetetorMovimento.prototype.constructor = DetetorMovimento;
 DetetorMovimento.prototype.acionar = function() {
 
     this.acionado = true;
-    this.enviarChangeEvent();
+    this.enviarEventoAlterado();
 
 }
 DetetorMovimento.prototype.desligar = function() {
 
     this.acionado = false;
-    this.enviarChangeEvent();
+    this.enviarEventoAlterado();
 
 }
 
@@ -489,7 +489,7 @@ DetetorFecho.prototype.constructor = DetetorFecho;
 DetetorFecho.prototype.setEstado = function(ligado) {
 
     this.ligado = ligado;
-    this.enviarChangeEvent();
+    this.enviarEventoAlterado();
 
 }
 
@@ -522,7 +522,7 @@ var DetetorPosicaoEstore = (function() {
 
                 if (POSICOES.hasOwnProperty(newValue)) {
                     posicao = newValue;
-                    this.enviarChangeEvent();
+                    this.enviarEventoAlterado();
 
                 }
 
@@ -571,13 +571,13 @@ DetetorIncendio.prototype.constructor = DetetorIncendio;
 DetetorIncendio.prototype.acionar = function() {
 
     this.acionado = true;
-    this.enviarChangeEvent();
+    this.enviarEventoAlterado();
 
 }
 DetetorIncendio.prototype.desligar = function() {
 
     this.acionado = false;
-    this.enviarChangeEvent();
+    this.enviarEventoAlterado();
 
 }
 
@@ -687,7 +687,7 @@ var ArCondicionado = (function() {
 
                 if (minTemperature < newValue && newValue < maxTemperature) {
                     temperatura = newValue;
-                    this.enviarChangeEvent();
+                    this.enviarEventoAlterado();
                 }
 
 
@@ -757,7 +757,7 @@ GeradorMovimento.prototype.gerarMovimento = function() {
     if (this.compartimento != void 0) {
 
         this.movimento = true; // o gerador fica em moviemento
-        this.enviarChangeEvent();
+        this.enviarEventoAlterado();
         var equipamentosCompartimento = this.compartimento.equipamentos; //vamos obter os equipamentos do compartimento
         equipamentosCompartimento.filter(function(equipamento) {
             return (equipamento instanceof DetetorMovimento);
@@ -776,7 +776,7 @@ GeradorMovimento.prototype.pararMovimento = function() {
         if (this.compartimento != void 0) { //se tiver em algum compartimento
 
             this.movimento = false; //o gerador deixa de gerar movimento
-            this.enviarChangeEvent();
+            this.enviarEventoAlterado();
             var equipamentosCompartimento = this.compartimento.equipamentos; //vamos obter os equipamentos
             //todo:verificar o codigo repetido
             //vamos agora verificar se algum gerador ainda está em movimento
@@ -828,7 +828,7 @@ TrincoEletrico.prototype.constructor = TrincoEletrico;
 TrincoEletrico.prototype.commutar = function() {
 
     this.ligado = !this.ligado;
-    this.enviarChangeEvent();
+    this.enviarEventoAlterado();
     this.sensor.setEstado(this.ligado);
 
 }
@@ -868,7 +868,7 @@ var MotorEletrico = (function() {
             set: function(newValue) {
                 if (POSICOES.hasOwnProperty(newValue)) {
                     posicao = newValue;
-                    this.enviarChangeEvent();
+                    this.enviarEventoAlterado();
 
                 }
 
@@ -933,7 +933,7 @@ GeradorIncendio.prototype.gerarFogo = function() {
     if (this.compartimento != void 0) {
 
         this.temFogo = true; // o gerador fica em moviemento
-        this.enviarChangeEvent();
+        this.enviarEventoAlterado();
         var equipamentosCompartimento = this.compartimento.equipamentos; //vamos obter os equipamentos do compartimento
         
         equipamentosCompartimento.filter(function(equipamento) {
@@ -953,7 +953,7 @@ GeradorIncendio.prototype.pararFogo = function() {
         if (this.compartimento != void 0) { //se tiver em algum compartimento
 
             this.temFogo = false; //o gerador deixa de gerar movimento
-            this.enviarChangeEvent();
+            this.enviarEventoAlterado();
             var equipamentosCompartimento = this.compartimento.equipamentos; //vamos obter os equipamentos
             //todo:verificar o codigo repetido
             //vamos agora verificar se algum gerador ainda está em movimento

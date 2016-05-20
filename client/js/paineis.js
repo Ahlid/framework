@@ -364,9 +364,7 @@ var PainelCompartimento = function(compartimento) {
 
     //vamos agora criar os filhos que sao as consolas
     var equipamentos = compartimento.equipamentos;
-    this.criarLi(this.ul, equipamentos, function() {
-        alert("oi");
-    });
+    this.criarLi(this.ul, equipamentos);
 
     //botao de criar
     this.criar.onclick = function(e) {
@@ -437,7 +435,7 @@ var PainelCompartimento = function(compartimento) {
     this.botaoMonitorizar.textContent = "Monitorizar";
 
     this.botaoMonitorizar.onclick = function(e) {
-        var painelMonitorizacao = new PainelMonotorizacao(compartimento);
+        var painelMonitorizacao = new PainelMonitorizacao(compartimento);
         painelMonitorizacao.aplicar();
     }
     this.elemento.appendChild(this.botaoMonitorizar);
@@ -470,7 +468,7 @@ PainelCompartimento.prototype.constructor = PainelCompartimento;
  * @constructor
  * @param {Compartimento} compartimento - A compartimento que irá ser gerida pelo painel
  */
-var PainelMonotorizacao = function(compartimento) {
+var PainelMonitorizacao = function(compartimento) {
 
     this.elemento = document.createElement("div");
     this.elemento.setAttribute('class', 'painel-monitorizacao');
@@ -486,6 +484,16 @@ var PainelMonotorizacao = function(compartimento) {
     
     var i = 0;
     var tr;
+    var equipamentosPorLinha = 4;
+    
+    for(var j = 6; j > 4 ; j--){
+            
+        if (compartimento.equipamentos.length % j  === 0){
+            equipamentosPorLinha = j;
+            break;
+        }
+    }
+    
     compartimento.equipamentos.forEach(function(equipamento) {
         
         if (i == 0) {
@@ -496,8 +504,11 @@ var PainelMonotorizacao = function(compartimento) {
         var td = document.createElement('td');
         td.appendChild(wrapEquipamento(equipamento).elemento);
         tr.appendChild(td);
-
-        i = (i + 1) % Math.ceil(Math.sqrt(compartimento.equipamentos.length));
+        
+        
+        i = (i + 1) % equipamentosPorLinha;
+              
+        
 
     }, this);
 
@@ -506,20 +517,21 @@ var PainelMonotorizacao = function(compartimento) {
     this.elemento.appendChild(this.botaoVoltar);
 
 }
-PainelMonotorizacao.prototype = Object.create(Painel.prototype);
-PainelMonotorizacao.prototype.constructor = PainelMonotorizacao;
+PainelMonitorizacao.prototype = Object.create(Painel.prototype);
+PainelMonitorizacao.prototype.constructor = PainelMonitorizacao;
 
 var equipamentoMap = new Map();
 equipamentoMap.set("MotorEletrico", MotorEletrico);
 equipamentoMap.set("TrincoEletrico", TrincoEletrico);
 equipamentoMap.set("GeradorMovimento", GeradorMovimento);
 equipamentoMap.set("ArCondicionado", ArCondicionado);
-equipamentoMap.set("Termometro", Termometro);
+equipamentoMap.set("GeradorIncendio", GeradorIncendio);
+equipamentoMap.set("DetetorPosicaoEstore", DetetorPosicaoEstore);
 equipamentoMap.set("DetetorFecho", DetetorFecho);
 equipamentoMap.set("DetetorMovimento", DetetorMovimento);
-equipamentoMap.set("DetetorPosicaoEstore", DetetorPosicaoEstore);
+equipamentoMap.set("Termometro", Termometro);
 equipamentoMap.set("DetetorIncendio", DetetorIncendio);
-equipamentoMap.set("GeradorIncendio", GeradorIncendio);
+
 
 function getEquipamento(equipamento) {
 

@@ -19,7 +19,7 @@
 
     <body>
         <script>
-            var flowCanvas = new FlowCanvas(1000, 600);
+            var flowCanvas = new FlowCanvas();
             document.body.appendChild(flowCanvas.element);
 
 
@@ -83,7 +83,7 @@
             var wrapperArCondicionado1 = wrapEquipamento(arCondicionado1);
             wrappers.push(wrapperArCondicionado1);
             var wrapperArCondicionado2 = wrapEquipamento(arCondicionado1);
-            wrappers.push(wrapperArCondicionado2);
+            //wrappers.push(wrapperArCondicionado2);
 
             var detetorFecho1 = new DetetorFecho();
             detetorFecho1.setCompartimento(compartimento);
@@ -184,8 +184,8 @@
                 
             }
             
-            var painel = new PainelMonotorizacao(compartimento);
-            document.body.appendChild(painel.table);
+            //var painel = new PainelMonotorizacao(compartimento);
+            //document.body.appendChild(painel.table);
         
         </script>
     
