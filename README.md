@@ -1,4 +1,19 @@
 
+A javascript project to simulate an domotic system
+
+Features
+- Movement detector
+- Movement generator
+- Fire detector
+- Electric shutters
+- AC
+- Temperature
+
+
+![alt tag](http://prntscr.com/eywv26)
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------
      ,-----.,--.                  ,--. ,---.   ,--.,------.  ,------.
     '  .--./|  | ,---. ,--.,--. ,-|  || o   \  |  ||  .-.  \ |  .---'
     |  |    |  || .-. ||  ||  |' .-. |`..'  |  |  ||  |  \  :|  `--, 
