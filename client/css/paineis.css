@@ -1,6 +1,5 @@
 
 #sistema {
-
     background-color: white;
     text-align: center;
     display: table;
@@ -11,18 +10,21 @@
 #sistema ul {
     max-height: 300px;
     padding: 0 20px;
-    display: inline-block;
+    display: block;
     text-align: left;
     overflow-y: scroll;
+    left: 0;
+    right: 0;
+    min-height: 40px;
+    border: 1px solid;
+    margin: 0;
+    padding: 10px;
+    border-color: beige;
 }
 
 #sistema li {
     list-style: none;
-    
 }
-
-
-
 
 .title {
     margin: 0;
@@ -31,6 +33,7 @@
 .subTitle {
     color:#848484;
     margin: 0;
+    margin-bottom: 15px;
 }
 
 .clickable, button {
@@ -47,38 +50,65 @@ button {
     border: none;
     color: white;
     padding: 5px 10px;
+    border: 1px solid;
     text-align: center;
     text-decoration: none;
-    display: inline-block;
     font-size: 12px;
+    width: 150px;
+    display: block;
+    margin: 0;
+    margin-top: 1px;
+    width: 100%;
 }
 
-.compartimento li span {
-    cursor: default;
-}
 
 .painel-domotico,
 .painel-consola,
 .painel-compartimento {
     padding: 20px;
+    text-align: left;
+    min-width: 200px;
 }
 
 .painel-monitorizacao {
     padding-bottom: 20px;
+    background-color: #3B3B3B;
+    padding: 20px;
 }
 
-.painel-monitorizacao table {
+.tabela-equipamentos {
     border-collapse: collapse;
     border-spacing: 0;
     border-style: none;
     border-width: 0;
     margin-bottom: 10px;
-    background-color: #3B3B3B;
     width: 100%;
     height: 100%;
 }
 
+.tabela-equipamentos .wrapper-equipamento {
+    text-align: center;
+    display: block;
+    margin: 0;
+    padding: 5px;
+    width: calc(160px * 1);
+    height: calc(200px * 1);
+    font-family: MaiandraGDRegular;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 4px;
+}
 
-
+.painel-monitorizacao button {
+    color: #3b3b3b;
+    background: #d2d2d2; /* Old browsers */
+    background: -moz-linear-gradient(top,  #d2d2d2 0%, #b7b7b7 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top,  #d2d2d2 0%,#b7b7b7 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom,  #d2d2d2 0%,#b7b7b7 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d2d2d2', endColorstr='#b7b7b7',GradientType=0 ); /* IE6-9 */
+    border-radius: 4px;
+    width: 100px;
+    margin: 0 auto;
+}
 
 

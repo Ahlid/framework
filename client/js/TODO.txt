@@ -1,0 +1,4 @@
+Os metodos podiam retornar o objeto para usar method chaining
+quais metodos? 
+Aqui é opcional tipo chamas o metodo ele faz o que tem a fazer e devolve o this
+Falta o jsdoc

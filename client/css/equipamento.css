@@ -22,14 +22,17 @@ body {
     background: -webkit-linear-gradient(top,  #d2d2d2 0%,#b7b7b7 100%); /* Chrome10-25,Safari5.1-6 */
     background: linear-gradient(to bottom,  #d2d2d2 0%,#b7b7b7 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d2d2d2', endColorstr='#b7b7b7',GradientType=0 ); /* IE6-9 */
-  
 }
 
-.equipamento-identificado {
-
+.equipamento-identificado .identificacao,
+.equipamento-identificado .tipo-equipamento{
+    margin: 0;
+    margin-bottom: 3px;
+    padding: 0;
+    color: #3b3b3b;
 }
 
-.equipamento-identificado h5 {
+.impacto-local .referencia {
     margin: 0;
     margin-bottom: 3px;
     padding: 0;
@@ -47,15 +50,11 @@ body {
     margin: 0 auto;
 }
 
-.impacto-local h5 {
-    margin: 0;
-    padding: 0;
-   
-}
 
-.impacto-local h5:hover {
+
+.impacto-local .referencia:hover {
     cursor: pointer;
-    color: rgb(198, 54, 77);
+    color: #ee4e4e;
 }
 
 .motor-eletrico h3 {
@@ -66,19 +65,7 @@ body {
 
 .motor-eletrico h3:hover {
     cursor: pointer;
-    color: rgb(198, 54, 77);
-}
-
-
-.motor-eletrico:hover {
-    cursor: pointer;
-}
-
-.ar-condicionado input {
-    display: block;
-    width: 50px;
-    margin: 0 auto;
-    text-align: center;
+    color: #ee4e4e;
 }
 
 .ar-condicionado h3 {
@@ -89,7 +76,15 @@ body {
 
 .ar-condicionado h3:hover {
     cursor: pointer;
-    color: rgb(198, 54, 77);
+    color: #ee4e4e;
+}
+
+
+.ar-condicionado input {
+    display: block;
+    width: 50px;
+    margin: 0 auto;
+    text-align: center;
 }
 
 .termometro h3 {
@@ -98,18 +93,24 @@ body {
     margin: 0 auto;
 }
 
-.gerador-movimento {
+.gerador-movimento .wrapper-icon-svg:hover,
+.gerador-incendio .wrapper-icon-svg:hover,
+.trinco-eletrico .wrapper-icon-svg:hover,
+.motor-eletrico .wrapper-icon-svg:hover,
+.ar-condicionado .wrapper-icon-svg:hover {
     cursor: pointer;
+    
 }
 
-
-.gerador-incendio:hover {
-    cursor: pointer;
+.gerador-movimento .wrapper-icon-svg:hover path,
+.gerador-incendio .wrapper-icon-svg:hover path,
+.trinco-eletrico .wrapper-icon-svg:hover path,
+.motor-eletrico .wrapper-icon-svg:hover path,
+.ar-condicionado .wrapper-icon-svg:hover path {
+    fill: #919191;
+    fill-rule: evenodd;
 }
 
-.trinco-eletrico:hover {
-    cursor: pointer;
-}
 
 .wrapper-icon-svg {
    margin-top: 10px;
@@ -120,19 +121,8 @@ body {
     fill-rule: evenodd;
 }
 
-.wrapper-icon-svg-path-hover {
-    fill: #919191;
-    fill-rule: evenodd;
-}
-
-@keyframes example {
-    from {fill:;}
-    to {fill: #ee4e4e;}
-}
-
 .wrapper-icon-svg-path-working {
-    animation-name: example;
-    animation-duration: 1s;
+
     fill: #ee4e4e;
     fill-rule: evenodd;
 }
