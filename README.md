@@ -1,5 +1,5 @@
 
-A javascript project to simulate an domotic system
+A javascript project to simulate a domotic system
 
 Features
 - Movement detector
